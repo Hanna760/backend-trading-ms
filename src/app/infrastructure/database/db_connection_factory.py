@@ -1,3 +1,4 @@
+import os
 from mysql.connector import pooling
 
 
@@ -16,11 +17,11 @@ class DatabaseConectionFactory:
             cls._connection_pool = pooling.MySQLConnectionPool(
                 pool_name="mypool",
                 pool_size=maxconn,
-                user="root",
-                password="1234",  # cambia si tu contenedor usa otra
-                host="localhost",
-                port=3306,
-                database="andina_trading",  # <- reemplaza con el nombre real
+                user=os.getenv("MYSQL_USER", "root"),
+                password=os.getenv("MYSQL_PASSWORD", "1234"),
+                host=os.getenv("MYSQL_HOST", "localhost"),
+                port=int(os.getenv("MYSQL_PORT", "3306")),
+                database=os.getenv("MYSQL_DATABASE", "andina_trading"),
             )
 
     ##responsabilidad del programador liberar la conexion despues de ser usada para su reutiliacion

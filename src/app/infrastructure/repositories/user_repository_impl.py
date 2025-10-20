@@ -146,7 +146,7 @@ class UserRepositoryImpl(CrudRepository[User], ABC):
             DatabaseConectionFactory.release_connection(connection)
 
     def delete(self, user_id: int) -> bool:
-        if user_id is not 1:
+        if user_id != 1:
           connection = DatabaseConectionFactory.get_connection()
           try:
               with connection.cursor() as cursor:

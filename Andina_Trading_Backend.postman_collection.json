@@ -1,0 +1,760 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Andina Trading Backend API",
+		"description": "Colección completa de endpoints para el backend de Andina Trading con autenticación JWT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/users/token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"token"
+							]
+						},
+						"description": "Autenticación de usuario y obtención de token JWT"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "admin123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/users/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"users",
+										"token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n    \"token_type\": \"bearer\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Current User Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						},
+						"description": "Obtener información del usuario autenticado"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints relacionados con autenticación y gestión de usuarios"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						},
+						"description": "Obtener todos los usuarios (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Obtener usuario por ID (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"username\": \"nuevo_usuario\",\n    \"full_name\": \"Usuario Nuevo\",\n    \"address\": \"Dirección del usuario\",\n    \"email\": \"usuario@ejemplo.com\",\n    \"hashed_password\": \"password_hash\",\n    \"disabled\": false,\n    \"rol\": 1,\n    \"city\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						},
+						"description": "Crear nuevo usuario"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"username\": \"usuario_actualizado\",\n    \"full_name\": \"Usuario Actualizado\",\n    \"address\": \"Nueva dirección\",\n    \"email\": \"nuevo@ejemplo.com\",\n    \"hashed_password\": \"nuevo_password_hash\",\n    \"disabled\": false,\n    \"rol\": 2,\n    \"city\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Actualizar usuario existente (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Eliminar usuario (requiere autenticación)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de usuarios"
+		},
+		{
+			"name": "Companies",
+			"item": [
+				{
+					"name": "Get All Companies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/companies/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"companies",
+								""
+							]
+						},
+						"description": "Obtener todas las empresas (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Company by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/companies/{{company_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"companies",
+								"{{company_id}}"
+							]
+						},
+						"description": "Obtener empresa por ID (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Empresa Ejemplo\",\n    \"descripcion\": \"Descripción de la empresa\",\n    \"sector_economico_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/companies/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"companies",
+								""
+							]
+						},
+						"description": "Crear nueva empresa (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Company",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Empresa Actualizada\",\n    \"descripcion\": \"Nueva descripción\",\n    \"sector_economico_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/companies/{{company_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"companies",
+								"{{company_id}}"
+							]
+						},
+						"description": "Actualizar empresa existente (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Company",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/companies/{{company_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"companies",
+								"{{company_id}}"
+							]
+						},
+						"description": "Eliminar empresa (requiere autenticación)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de empresas"
+		},
+		{
+			"name": "Actions",
+			"item": [
+				{
+					"name": "Get All Actions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/actions/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"actions",
+								""
+							]
+						},
+						"description": "Obtener todas las acciones (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Action by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/actions/{{action_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"actions",
+								"{{action_id}}"
+							]
+						},
+						"description": "Obtener acción por ID (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Action",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Acción Ejemplo\",\n    \"valor\": 100.50,\n    \"fecha_hora\": \"2024-01-15T10:30:00\",\n    \"empresa_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/actions/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"actions",
+								""
+							]
+						},
+						"description": "Crear nueva acción (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Action",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Acción Actualizada\",\n    \"valor\": 150.75,\n    \"fecha_hora\": \"2024-01-15T11:30:00\",\n    \"empresa_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/actions/{{action_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"actions",
+								"{{action_id}}"
+							]
+						},
+						"description": "Actualizar acción existente (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Action",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/actions/{{action_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"actions",
+								"{{action_id}}"
+							]
+						},
+						"description": "Eliminar acción (requiere autenticación)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de acciones"
+		},
+		{
+			"name": "Contracts",
+			"item": [
+				{
+					"name": "Get All Contracts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/contracts/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contracts",
+								""
+							]
+						},
+						"description": "Obtener todos los contratos (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contract by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/contracts/{{contract_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contracts",
+								"{{contract_id}}"
+							]
+						},
+						"description": "Obtener contrato por ID (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Contract",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"numero_contrato\": 12345,\n    \"fecha_hora_inicio\": \"2024-01-15T09:00:00\",\n    \"fecha_hora_fin\": \"2024-12-31T18:00:00\",\n    \"comision\": 2.5,\n    \"inversionista_id\": 1,\n    \"comisionista_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/contracts/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contracts",
+								""
+							]
+						},
+						"description": "Crear nuevo contrato (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contract",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"numero_contrato\": 12345,\n    \"fecha_hora_inicio\": \"2024-01-15T09:00:00\",\n    \"fecha_hora_fin\": \"2024-12-31T18:00:00\",\n    \"comision\": 3.0,\n    \"inversionista_id\": 1,\n    \"comisionista_id\": 3\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/contracts/{{contract_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contracts",
+								"{{contract_id}}"
+							]
+						},
+						"description": "Actualizar contrato existente (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contract",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/contracts/{{contract_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contracts",
+								"{{contract_id}}"
+							]
+						},
+						"description": "Eliminar contrato (soft delete) (requiere autenticación)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de contratos"
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/order/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								""
+							]
+						},
+						"description": "Obtener todas las órdenes (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/order/{{order_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								"{{order_id}}"
+							]
+						},
+						"description": "Obtener orden por ID (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tipo_orden\": \"COMPRA\",\n    \"precio\": 150.25,\n    \"fecha_hora\": \"2024-01-15T14:30:00\",\n    \"comision\": 1.5,\n    \"usuario_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/order/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								""
+							]
+						},
+						"description": "Crear nueva orden (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tipo_orden\": \"VENTA\",\n    \"precio\": 160.50,\n    \"fecha_hora\": \"2024-01-15T15:30:00\",\n    \"comision\": 2.0,\n    \"usuario_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/order/{{order_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								"{{order_id}}"
+							]
+						},
+						"description": "Actualizar orden existente (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/order/{{order_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								"{{order_id}}"
+							]
+						},
+						"description": "Eliminar orden (soft delete) (requiere autenticación)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de órdenes"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

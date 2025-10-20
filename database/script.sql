@@ -1,4 +1,4 @@
-BD CAMACHO -- Tabla Rol
+-- BD HANNA -- Tabla Rol
 CREATE TABLE Rol (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
@@ -231,11 +231,11 @@ INSERT INTO Usuario (
     update_at,
     deleted_at
 ) VALUES (
-    1,
+    2,
     'accionista',
     'John Doe1',
     '123 Main St',
-    'johndoe@example.com',
+    'accionista@example.com',
     '$2b$12$nOnxeOwO1MXHUdR/9iaVbujOes.eUFjhlrKp90eDFc6co4KP4p0DO',
     FALSE,
     1,   -- ID del rol

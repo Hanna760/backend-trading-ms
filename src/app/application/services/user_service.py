@@ -33,7 +33,12 @@ class UserService:
         return self.user_repository.delete(user_id)
 
     def verify_password(self, plain_password, hashed_password):
-      return pwd_context.verify(plain_password, hashed_password)
+        # Truncar la contraseña a 72 bytes máximo para bcrypt
+        if isinstance(plain_password, str):
+            plain_password = plain_password.encode('utf-8')
+        if len(plain_password) > 72:
+            plain_password = plain_password[:72]
+        return pwd_context.verify(plain_password, hashed_password)
 
     def authenticate_user(self, username: str, password: str) -> UserInDB:
       user = self.user_repository.get_user(username)
