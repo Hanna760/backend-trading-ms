@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, Depends, HTTPException
-from starlette.middleware.cors import CORSMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from src.app.infrastructure.routers.company_router import router as company_router
 from src.app.infrastructure.routers.user_router import router as user_router
@@ -19,13 +18,19 @@ load_dotenv("docker.env")
 app = FastAPI(title="Andina Trading Backend")
 
 origins = [
-    "http://localhost:4200",  # Frontend Angular
-    # Agrega más orígenes si es necesario
+    "http://localhost:4200",  # Frontend Angular local
+    "http://localhost:3000",  # React development server
+    "http://localhost:8080",  # Vue development server
+    "http://127.0.0.1:4200",  # Alternative localhost
+    "http://127.0.0.1:3000",  # Alternative localhost
+    "https://frontend-trading-k22s.vercel.app",  # Tu frontend en Vercel
+    "https://*.vercel.app",  # Otros deployments de Vercel
+    "https://vercel.app",    # Vercel main domain
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Permitir solicitudes desde Angular
+    allow_origins=origins,  # Use specific origins instead of ["*"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

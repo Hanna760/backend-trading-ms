@@ -92,6 +92,19 @@ CREATE TABLE Auditoria (
     FOREIGN KEY (usuario_id) REFERENCES Usuario(id)
 );
 
+-- Tabla Acción (movida antes de Orden para evitar error de foreign key)
+CREATE TABLE Accion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    valor DECIMAL(10, 2),
+    fecha_hora DATETIME,
+    empresa_id INT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_at DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME DEFAULT NULL,
+    FOREIGN KEY (empresa_id) REFERENCES Empresa(id)
+);
+
 -- Tabla Orden
 CREATE TABLE Orden (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -121,19 +134,6 @@ CREATE TABLE Historial_Orden (
     update_at DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     deleted_at DATETIME DEFAULT NULL,
     FOREIGN KEY (orden_id) REFERENCES Orden(id)
-);
-
--- Tabla Acción
-CREATE TABLE Accion (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    valor DECIMAL(10, 2),
-    fecha_hora DATETIME,
-    empresa_id INT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    update_at DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at DATETIME DEFAULT NULL,
-    FOREIGN KEY (empresa_id) REFERENCES Empresa(id)
 );
 
 -- Tabla Historial_Accion
@@ -246,6 +246,22 @@ INSERT INTO Usuario (
     NULL,
     NULL
 );
+
+-- Empresas de ejemplo
+INSERT INTO Empresa (nombre, descripcion, sector_economico_id, created_at) VALUES
+('Apple Inc.', 'Empresa tecnológica líder en dispositivos móviles y software', 4, NOW()),
+('Microsoft Corporation', 'Empresa de software y servicios en la nube', 4, NOW()),
+('Amazon.com Inc.', 'Empresa de comercio electrónico y servicios en la nube', 6, NOW()),
+('Tesla Inc.', 'Empresa de vehículos eléctricos y energía renovable', 5, NOW()),
+('Google LLC', 'Empresa de tecnología y servicios de internet', 4, NOW());
+
+-- Acciones de ejemplo
+INSERT INTO Accion (nombre, valor, fecha_hora, empresa_id, created_at) VALUES
+('AAPL', 150.25, NOW(), 1, NOW()),
+('MSFT', 300.50, NOW(), 2, NOW()),
+('AMZN', 2500.75, NOW(), 3, NOW()),
+('TSLA', 800.00, NOW(), 4, NOW()),
+('GOOGL', 180.30, NOW(), 5, NOW());
 
 -- Órdenes de ejemplo para probar el portafolio
 INSERT INTO Orden (tipo_orden, precio, fecha_hora, comision, usuario_id, accion_id, estado) VALUES

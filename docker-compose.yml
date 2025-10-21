@@ -2,7 +2,7 @@ services:
   # MySQL Database
   mysql:
     image: mysql:8.0
-    container_name: andina_trading_mysql
+    container_name: backend-ms-mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: 1234
@@ -22,7 +22,7 @@ services:
   # FastAPI Application
   app:
     build: .
-    container_name: andina_trading_app
+    container_name: backend-ms-app
     restart: unless-stopped
     ports:
       - "8000:8000"
