@@ -22,12 +22,31 @@ def get_order_service() -> OrderService:
 
 
 # Obtener todas las órdenes
-@router.get("/", response_model=List[Order], summary="Get All Ordenes")
-def get_all_ordenes(
+@router.get("/", response_model=List[Order], summary="Get All Orders")
+def get_all_orders(
     service: OrderService = Depends(get_order_service),
     current_user: User = Depends(get_current_user)
 ):
+    """
+    Obtener TODAS las órdenes del sistema
+    Requiere autenticación Bearer token
+    Retorna array completo de órdenes ordenadas por fecha (más recientes primero)
+    """
     return service.get_all()
+
+
+# Obtener órdenes pendientes
+@router.get("/pending", response_model=List[Order], summary="Get Pending Orders")
+def get_pending_orders(
+    service: OrderService = Depends(get_order_service),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Obtener órdenes pendientes de aprobación
+    Requiere autenticación Bearer token
+    Filtro: estado = 'pending'
+    """
+    return service.get_pending_orders()
 
 
 # Obtener orden por ID
@@ -65,6 +84,46 @@ def update_orden(
     if not updated_orden:
         raise HTTPException(status_code=404, detail="Orden not found")
     return updated_orden
+
+
+# Aprobar una orden específica
+@router.put("/{order_id}/approve", response_model=dict, summary="Approve Order")
+def approve_order(
+    order_id: int = Path(..., description="The ID of the order to approve"),
+    service: OrderService = Depends(get_order_service),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Aprobar una orden específica
+    Requiere autenticación Bearer token
+    Cambia estado a 'approved'
+    Retorna mensaje de éxito
+    """
+    try:
+        service.approve_order(order_id)
+        return {"message": "Orden aprobada exitosamente"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+# Denegar una orden específica
+@router.put("/{order_id}/deny", response_model=dict, summary="Deny Order")
+def deny_order(
+    order_id: int = Path(..., description="The ID of the order to deny"),
+    service: OrderService = Depends(get_order_service),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Denegar una orden específica
+    Requiere autenticación Bearer token
+    Cambia estado a 'denied'
+    Retorna mensaje de éxito
+    """
+    try:
+        service.deny_order(order_id)
+        return {"message": "Orden denegada exitosamente"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 # Eliminar una orden (soft delete)

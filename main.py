@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI, Depends, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,8 +8,12 @@ from src.app.infrastructure.routers.user_router import router as user_router
 from src.app.infrastructure.routers.action_router import router as action_router
 from src.app.infrastructure.routers.contract_router import router as contract_router
 from src.app.infrastructure.routers.order_router import router as order_router
+from src.app.infrastructure.routers.portfolio_router import router as portfolio_router
 
 from src.app.infrastructure.database.db_connection_factory import DatabaseConectionFactory
+
+# Cargar variables de entorno desde docker.env para desarrollo local
+load_dotenv("docker.env")
 
 
 app = FastAPI(title="Andina Trading Backend")
@@ -39,4 +45,5 @@ app.include_router(company_router, prefix="/companies", tags=["Companies"])
 app.include_router(action_router, prefix="/actions", tags=["Actions"])
 app.include_router(contract_router, prefix="/contracts", tags=["Contracts"])
 app.include_router(order_router, prefix="/order", tags=["Orders"])
+app.include_router(portfolio_router, prefix="/portfolio", tags=["Portfolio"])
 

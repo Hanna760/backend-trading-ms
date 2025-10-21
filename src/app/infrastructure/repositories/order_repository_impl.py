@@ -12,7 +12,7 @@ class OrdenRepositoryImpl(CrudRepository[Order], ABC):
         connection = DatabaseConectionFactory.get_connection()
         try:
             with connection.cursor(dictionary=True) as cursor:
-                cursor.execute("SELECT * FROM Orden WHERE deleted_at IS NULL")
+                cursor.execute("SELECT * FROM Orden WHERE deleted_at IS NULL ORDER BY fecha_hora DESC")
                 rows = cursor.fetchall()
                 return [Order(**row) for row in rows]
         finally:
@@ -33,14 +33,16 @@ class OrdenRepositoryImpl(CrudRepository[Order], ABC):
         try:
             with connection.cursor() as cursor:
                 cursor.execute("""
-                    INSERT INTO Orden (tipo_orden, precio, fecha_hora, comision, usuario_id)
-                    VALUES (%s, %s, %s, %s, %s)
+                    INSERT INTO Orden (tipo_orden, precio, fecha_hora, comision, usuario_id, accion_id, estado)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
                 """, (
                     orden.tipo_orden,
                     orden.precio,
                     orden.fecha_hora,
                     orden.comision,
-                    orden.usuario_id
+                    orden.usuario_id,
+                    orden.accion_id,
+                    orden.estado or 'pending'
                 ))
                 connection.commit()
                 cursor.execute("SELECT LAST_INSERT_ID()")
@@ -60,6 +62,8 @@ class OrdenRepositoryImpl(CrudRepository[Order], ABC):
                         fecha_hora = %s,
                         comision = %s,
                         usuario_id = %s,
+                        accion_id = %s,
+                        estado = %s,
                         update_at = NOW()
                     WHERE id = %s AND deleted_at IS NULL
                 """, (
@@ -68,6 +72,8 @@ class OrdenRepositoryImpl(CrudRepository[Order], ABC):
                     orden.fecha_hora,
                     orden.comision,
                     orden.usuario_id,
+                    orden.accion_id,
+                    orden.estado,
                     id
                 ))
                 connection.commit()
@@ -82,5 +88,30 @@ class OrdenRepositoryImpl(CrudRepository[Order], ABC):
                 cursor.execute("UPDATE Orden SET deleted_at = %s WHERE id = %s AND deleted_at IS NULL", (datetime.now(), id))
                 connection.commit()
                 return cursor.rowcount > 0
+        finally:
+            DatabaseConectionFactory.release_connection(connection)
+
+    def get_pending_orders(self) -> List[Order]:
+        connection = DatabaseConectionFactory.get_connection()
+        try:
+            with connection.cursor(dictionary=True) as cursor:
+                cursor.execute("SELECT * FROM Orden WHERE deleted_at IS NULL AND estado = 'pending' ORDER BY fecha_hora DESC")
+                rows = cursor.fetchall()
+                return [Order(**row) for row in rows]
+        finally:
+            DatabaseConectionFactory.release_connection(connection)
+
+    def update_order_status(self, id: int, status: str) -> Optional[Order]:
+        connection = DatabaseConectionFactory.get_connection()
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    UPDATE Orden SET
+                        estado = %s,
+                        update_at = NOW()
+                    WHERE id = %s AND deleted_at IS NULL
+                """, (status, id))
+                connection.commit()
+                return self.get_by_id(id)
         finally:
             DatabaseConectionFactory.release_connection(connection)

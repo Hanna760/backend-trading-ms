@@ -26,18 +26,14 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    env_file:
+      - docker.env
     environment:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_USER: root
       MYSQL_PASSWORD: 1234
       MYSQL_DATABASE: andina_trading
-      # Email Configuration
-      MAIL_USERNAME: ${MAIL_USERNAME:-your_email@gmail.com}
-      MAIL_PASSWORD: ${MAIL_PASSWORD:-your_app_password}
-      MAIL_FROM: ${MAIL_FROM:-your_email@gmail.com}
-      MAIL_PORT: ${MAIL_PORT:-587}
-      MAIL_SERVER: ${MAIL_SERVER:-smtp.gmail.com}
     depends_on:
       mysql:
         condition: service_healthy

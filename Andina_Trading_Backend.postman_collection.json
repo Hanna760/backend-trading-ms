@@ -25,6 +25,31 @@
 			"key": "access_token",
 			"value": "",
 			"type": "string"
+		},
+		{
+			"key": "order_id",
+			"value": "12",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "company_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "action_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "contract_id",
+			"value": "1",
+			"type": "string"
 		}
 	],
 	"item": [
@@ -618,6 +643,88 @@
 			"description": "Endpoints para gestión de contratos"
 		},
 		{
+			"name": "Portfolio",
+			"item": [
+				{
+					"name": "Get User Portfolio",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/portfolio/portfolio",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"portfolio",
+								"portfolio"
+							]
+						},
+						"description": "Obtiene el portafolio completo del usuario autenticado. Incluye saldo disponible, valor total del portafolio, ganancia/pérdida total y lista de acciones con sus detalles. Requiere autenticación Bearer token."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/portfolio/portfolio",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"portfolio",
+										"portfolio"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"usuario_id\": 2,\n    \"saldo_disponible\": 24500.0,\n    \"valor_total_portafolio\": 500.0,\n    \"ganancia_perdida_total\": 25.0,\n    \"porcentaje_cambio_total\": 5.26,\n    \"acciones\": [\n        {\n            \"accion_id\": 1,\n            \"nombre_accion\": \"AAPL\",\n            \"cantidad\": 1,\n            \"precio_promedio\": 150.25,\n            \"valor_actual\": 150.25,\n            \"ganancia_perdida\": 0.0,\n            \"porcentaje_cambio\": 0.0\n        },\n        {\n            \"accion_id\": 2,\n            \"nombre_accion\": \"MSFT\",\n            \"cantidad\": 1,\n            \"precio_promedio\": 300.50,\n            \"valor_actual\": 300.50,\n            \"ganancia_perdida\": 0.0,\n            \"porcentaje_cambio\": 0.0\n        }\n    ],\n    \"fecha_actualizacion\": \"2024-01-21T05:49:40.000Z\"\n}"
+						},
+						{
+							"name": "Unauthorized",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/portfolio/portfolio",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"portfolio",
+										"portfolio"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Not authenticated\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Endpoints para gestión del portafolio de usuarios. Incluye información completa del portafolio con saldo base de $25,000."
+		},
+		{
 			"name": "Orders",
 			"item": [
 				{
@@ -635,9 +742,86 @@
 								""
 							]
 						},
-						"description": "Obtener todas las órdenes (requiere autenticación)"
+						"description": "Obtener TODAS las órdenes del sistema ordenadas por fecha (más recientes primero). Requiere autenticación Bearer token."
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/order/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 12,\n        \"tipo_orden\": \"BUY\",\n        \"precio\": 125.50,\n        \"fecha_hora\": \"2024-01-15T10:30:45\",\n        \"usuario_id\": 123,\n        \"comision\": 5.25,\n        \"estado\": \"pending\",\n        \"created_at\": \"2024-01-15T10:30:45\",\n        \"update_at\": null,\n        \"deleted_at\": null\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Pending Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/order/pending",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								"pending"
+							]
+						},
+						"description": "Obtener órdenes pendientes de aprobación (estado = 'pending'). Requiere autenticación Bearer token."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/order/pending",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"pending"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 12,\n        \"tipo_orden\": \"BUY\",\n        \"precio\": 125.50,\n        \"fecha_hora\": \"2024-01-15T10:30:45\",\n        \"usuario_id\": 123,\n        \"comision\": 5.25,\n        \"estado\": \"pending\",\n        \"created_at\": \"2024-01-15T10:30:45\",\n        \"update_at\": null,\n        \"deleted_at\": null\n    }\n]"
+						}
+					]
 				},
 				{
 					"name": "Get Order by ID",
@@ -654,9 +838,66 @@
 								"{{order_id}}"
 							]
 						},
-						"description": "Obtener orden por ID (requiere autenticación)"
+						"description": "Obtener orden por ID específico. Requiere autenticación Bearer token."
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/order/12",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"12"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 12,\n    \"tipo_orden\": \"BUY\",\n    \"precio\": 125.50,\n    \"fecha_hora\": \"2024-01-15T10:30:45\",\n    \"usuario_id\": 123,\n    \"comision\": 5.25,\n    \"estado\": \"pending\",\n    \"created_at\": \"2024-01-15T10:30:45\",\n    \"update_at\": null,\n    \"deleted_at\": null\n}"
+						},
+						{
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/order/999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Orden not found\"\n}"
+						}
+					]
 				},
 				{
 					"name": "Create Order",
@@ -670,7 +911,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"tipo_orden\": \"COMPRA\",\n    \"precio\": 150.25,\n    \"fecha_hora\": \"2024-01-15T14:30:00\",\n    \"comision\": 1.5,\n    \"usuario_id\": 1\n}"
+							"raw": "{\n    \"tipo_orden\": \"BUY\",\n    \"precio\": 150.25,\n    \"fecha_hora\": \"2024-01-15T14:30:00\",\n    \"comision\": 1.5,\n    \"usuario_id\": 1,\n    \"estado\": \"pending\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/order/",
@@ -682,9 +923,251 @@
 								""
 							]
 						},
-						"description": "Crear nueva orden (requiere autenticación)"
+						"description": "Crear nueva orden. Requiere autenticación Bearer token. El estado por defecto es 'pending'."
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Created",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"tipo_orden\": \"BUY\",\n    \"precio\": 150.25,\n    \"fecha_hora\": \"2024-01-15T14:30:00\",\n    \"comision\": 1.5,\n    \"usuario_id\": 1,\n    \"estado\": \"pending\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/order/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 13,\n    \"tipo_orden\": \"BUY\",\n    \"precio\": 150.25,\n    \"fecha_hora\": \"2024-01-15T14:30:00\",\n    \"usuario_id\": 1,\n    \"comision\": 1.5,\n    \"estado\": \"pending\",\n    \"created_at\": \"2024-01-15T14:30:00\",\n    \"update_at\": null,\n    \"deleted_at\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Approve Order",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/order/{{order_id}}/approve",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								"{{order_id}}",
+								"approve"
+							]
+						},
+						"description": "Aprobar una orden específica. Cambia el estado a 'approved'. Requiere autenticación Bearer token. Body vacío como envía el frontend."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{base_url}}/order/12/approve",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"12",
+										"approve"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Orden aprobada exitosamente\"\n}"
+						},
+						{
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/order/999/approve",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"999",
+										"approve"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Order with id 999 not found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Deny Order",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/order/{{order_id}}/deny",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								"{{order_id}}",
+								"deny"
+							]
+						},
+						"description": "Denegar una orden específica. Cambia el estado a 'denied'. Requiere autenticación Bearer token. Body vacío como envía el frontend."
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{base_url}}/order/12/deny",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"12",
+										"deny"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Orden denegada exitosamente\"\n}"
+						},
+						{
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/order/999/deny",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"999",
+										"deny"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Order with id 999 not found\"\n}"
+						}
+					]
 				},
 				{
 					"name": "Update Order",
@@ -698,7 +1181,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"tipo_orden\": \"VENTA\",\n    \"precio\": 160.50,\n    \"fecha_hora\": \"2024-01-15T15:30:00\",\n    \"comision\": 2.0,\n    \"usuario_id\": 1\n}"
+							"raw": "{\n    \"tipo_orden\": \"SELL\",\n    \"precio\": 160.50,\n    \"fecha_hora\": \"2024-01-15T15:30:00\",\n    \"comision\": 2.0,\n    \"usuario_id\": 1,\n    \"estado\": \"pending\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/order/{{order_id}}",
@@ -710,9 +1193,47 @@
 								"{{order_id}}"
 							]
 						},
-						"description": "Actualizar orden existente (requiere autenticación)"
+						"description": "Actualizar orden existente completamente. Requiere autenticación Bearer token."
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"tipo_orden\": \"SELL\",\n    \"precio\": 160.50,\n    \"fecha_hora\": \"2024-01-15T15:30:00\",\n    \"comision\": 2.0,\n    \"usuario_id\": 1,\n    \"estado\": \"pending\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/order/12",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"12"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 12,\n    \"tipo_orden\": \"SELL\",\n    \"precio\": 160.50,\n    \"fecha_hora\": \"2024-01-15T15:30:00\",\n    \"usuario_id\": 1,\n    \"comision\": 2.0,\n    \"estado\": \"pending\",\n    \"created_at\": \"2024-01-15T10:30:45\",\n    \"update_at\": \"2024-01-15T15:30:00\",\n    \"deleted_at\": null\n}"
+						}
+					]
 				},
 				{
 					"name": "Delete Order",
@@ -729,12 +1250,69 @@
 								"{{order_id}}"
 							]
 						},
-						"description": "Eliminar orden (soft delete) (requiere autenticación)"
+						"description": "Eliminar orden (soft delete). Requiere autenticación Bearer token."
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/order/12",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"12"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Orden deleted successfully\"\n}"
+						},
+						{
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/order/999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"order",
+										"999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"detail\": \"Orden not found or already deleted\"\n}"
+						}
+					]
 				}
 			],
-			"description": "Endpoints para gestión de órdenes"
+			"description": "Endpoints para gestión de órdenes con estados (pending, approved, denied). Incluye el endpoint PUT /order/{id}/deny que estaba faltando."
 		}
 	],
 	"event": [
